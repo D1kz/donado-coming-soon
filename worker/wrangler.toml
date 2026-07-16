@@ -1,0 +1,6 @@
+name = "donado-waitlist"
+main = "worker.js"
+compatibility_date = "2026-07-01"
+
+[vars]
+ALLOWED_ORIGIN = "https://donado.me"
