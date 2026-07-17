@@ -331,25 +331,28 @@ button {
 
 .press-hint {
   position: absolute;
-  left: 100%;
+  right: 100%;
   top: 40%;
-  margin-left: 18px;
+  margin-right: clamp(8px, 2.5vw, 18px);
   display: flex;
   align-items: center;
-  gap: 8px;
-  white-space: nowrap;
+  gap: clamp(4px, 1.5vw, 8px);
+  max-width: 22vw;
+}
+
+.press-hint svg {
+  flex: none;
+  width: clamp(18px, 4.5vw, 32px);
+  height: auto;
 }
 
 .press-hint span {
-  font-size: 14px;
+  font-size: clamp(10px, 3vw, 14px);
   font-weight: 800;
   color: var(--accent2);
-  transform: rotate(2deg);
+  transform: rotate(-2deg);
   display: inline-block;
-}
-
-@media (max-width: 620px) {
-  .press-hint { display: none; }
+  line-height: 1.15;
 }
 
 /* Tagline area */

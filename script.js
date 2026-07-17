@@ -252,7 +252,7 @@
     pressTimeout = setTimeout(() => {
       if (myId === pressId) {
         pressAmt.classList.add('is-hidden');
-        if (!state.narrow) pressHint.style.display = '';
+        pressHint.style.display = '';
       }
     }, 1400);
 
@@ -445,7 +445,6 @@
     if (narrow !== state.narrow) {
       state.narrow = narrow;
       renderLang();
-      pressHint.style.display = narrow ? 'none' : '';
     }
     sizeCanvas();
   });
@@ -574,7 +573,6 @@
   applyTheme();
   renderLang();
   counterNum.textContent = grp(chart.total);
-  if (state.narrow) pressHint.style.display = 'none';
   last = performance.now() / 1000;
   sizeCanvas();
   requestAnimationFrame(tick);
