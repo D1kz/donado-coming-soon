@@ -244,6 +244,7 @@
       }
     }, 1400);
 
+    if (state.presses === 0 && window.umami) window.umami.track('donado-button-first-press');
     state.presses++;
     spawnConfetti();
     updateWaitlistVisibility();
@@ -389,6 +390,7 @@
     })
       .then((res) => {
         if (!res.ok) throw new Error('bad response');
+        if (window.umami) window.umami.track('waitlist-signup', { lang: lang });
         state.wlDone = true;
         wlDoneTextEl.textContent = DICT[lang].wlDone;
         updateWaitlistVisibility();
