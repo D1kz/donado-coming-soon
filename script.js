@@ -350,7 +350,7 @@
   // Cloudflare Worker endpoint — verifies the Turnstile token server-side
   // and writes the lead to Firestore via the Admin SDK. Replace with the
   // deployed Worker URL (e.g. https://donado-waitlist.YOUR_SUBDOMAIN.workers.dev).
-  const WAITLIST_ENDPOINT = 'https://YOUR_WORKER_SUBDOMAIN.workers.dev/waitlist';
+  const WAITLIST_ENDPOINT = 'https://donado-waitlist.daur1kz.workers.dev/waitlist';
 
   let wlSubmitting = false;
 
