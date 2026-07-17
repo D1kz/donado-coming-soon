@@ -516,7 +516,7 @@
     if (vis.length < 2) vis = chart.points.slice(-2);
     const lo = chart.lo, hi = Math.max(chart.hi, lo + 1);
     const top = h * 0.52, bot = h * 0.92;
-    const X = (tt) => (tt - (now - W)) / W * (w - 12);
+    const X = (tt) => (tt - (now - W)) / W * w;
     const Y = (v) => bot - (v - lo) / (hi - lo) * (bot - top);
     const P = vis.map(pt => ({ x: X(pt.t), y: Y(pt.v) }));
 
@@ -552,19 +552,27 @@
   }
 
   let last = performance.now() / 1000;
+  // Tracks how much real wall-clock time has been "paused out" of the chart's
+  // own timeline (e.g. the tab was backgrounded and rAF stopped firing), so a
+  // long gap doesn't look like all chart history instantly aged out at once.
+  let pausedOffset = 0;
   function tick() {
+    const realNow = performance.now() / 1000;
+    const gap = realNow - last;
+    if (gap > 1) pausedOffset += gap - 0.05;
+    const now = realNow - pausedOffset;
+
     if (canvas.width > 0) {
       const ctx = canvas.getContext('2d');
       const dpr = window.devicePixelRatio || 1;
       const w = canvas.width / dpr, h = canvas.height / dpr;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.clearRect(0, 0, w, h);
-      const now = performance.now() / 1000;
-      const dt = Math.min(now - last, 0.05);
-      last = now;
+      const dt = Math.min(gap, 0.05);
       updateChart(now, dt);
       drawChart(ctx, w, h, now);
     }
+    last = realNow;
     counterNum.textContent = grp(chart.total);
     requestAnimationFrame(tick);
   }
