@@ -7,11 +7,7 @@
       tagPairs: [
         { base: 'Забудь донат.', rot: 'Играй в донадо.' },
         { base: 'Больше не проси донаты.', rot: 'Проси донадо.' },
-        { base: 'Донатить — в прошлом.', rot: 'Начинай донадить.' },
-        { base: 'Ты не просто смотришь.', rot: 'Ты играешь.' },
-        { base: 'Ты не просто смотришь.', rot: 'Ты покупаешь.' },
-        { base: 'Ты не просто стримишь.', rot: 'Ты играешь.' },
-        { base: 'Ты не просто стримишь.', rot: 'Ты продаёшь.' }
+        { base: 'Донатить — в прошлом.', rot: 'Начинай донадить.' }
       ],
       cs: ['скоро'],
       hint: 'жми',
@@ -28,11 +24,7 @@
       tagPairs: [
         { base: 'Донатты ұмыт.', rot: 'Донадо ойна.' },
         { base: 'Донат сұрама.', rot: 'Донадо сұра.' },
-        { base: 'Донат ету — өткен шақта.', rot: 'Донадо ойнауды баста.' },
-        { base: 'Сен жай ғана қарамайсың.', rot: 'Сен ойнайсың.' },
-        { base: 'Сен жай ғана қарамайсың.', rot: 'Сен сатып аласың.' },
-        { base: 'Сен жай ғана стримдемейсің.', rot: 'Сен ойнайсың.' },
-        { base: 'Сен жай ғана стримдемейсің.', rot: 'Сен сатасың.' }
+        { base: 'Донат ету — өткен шақта.', rot: 'Донадо ойнауды баста.' }
       ],
       cs: ['жақында'],
       csNarrow: ['жа', 'қын', 'да'],
@@ -50,11 +42,7 @@
       tagPairs: [
         { base: 'Forget donations.', rot: 'Play donado.' },
         { base: 'Stop asking for donations.', rot: 'Ask for donado.' },
-        { base: 'Donating is old news.', rot: 'Donado is the new move.' },
-        { base: "It's not just watching.", rot: "It's playing." },
-        { base: "It's not just watching.", rot: "It's shopping." },
-        { base: "It's not just streaming.", rot: "It's playing." },
-        { base: "It's not just streaming.", rot: "It's selling." }
+        { base: 'Donating is old news.', rot: 'Donado is the new move.' }
       ],
       cs: ['coming soon'],
       csNarrow: ['coming', 'soon'],
