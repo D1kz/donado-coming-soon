@@ -641,31 +641,42 @@
 
   let slide2Tracked = false;
   let lastKnownSlide = initialSlide;
-  if ('IntersectionObserver' in window) {
-    const slideObserver = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const idx = slideEls.indexOf(entry.target);
-            dotEls.forEach((dot, i) => dot.classList.toggle('is-active', i === idx));
-            if (idx === 1 && !slide2Tracked) {
-              slide2Tracked = true;
-              if (window.umami) window.umami.track('slide2-view', Object.assign({ lang: lang }, utm));
+
+  // Defer both the reveal and the observer to the next frame: scrollIntoView
+  // above needs a layout pass to actually land before IntersectionObserver's
+  // first (synchronous-ish) callback fires — otherwise that first callback
+  // can report slide 0 as still intersecting for a frame, flipping the dot
+  // back and forth ("jump-pending" would already be gone by then, so the
+  // reveal is deferred here too, not just the observer).
+  requestAnimationFrame(() => {
+    document.documentElement.classList.remove('jump-pending');
+
+    if ('IntersectionObserver' in window) {
+      const slideObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              const idx = slideEls.indexOf(entry.target);
+              dotEls.forEach((dot, i) => dot.classList.toggle('is-active', i === idx));
+              if (idx === 1 && !slide2Tracked) {
+                slide2Tracked = true;
+                if (window.umami) window.umami.track('slide2-view', Object.assign({ lang: lang }, utm));
+              }
+              // Reflect the current slide in the URL hash without adding
+              // history entries, so a link to #about can be shared/re-opened.
+              if (idx !== lastKnownSlide) {
+                lastKnownSlide = idx;
+                const url = location.pathname + location.search + SLIDE_HASHES[idx];
+                history.replaceState(null, '', url);
+              }
             }
-            // Reflect the current slide in the URL hash without adding
-            // history entries, so a link to #about can be shared/re-opened.
-            if (idx !== lastKnownSlide) {
-              lastKnownSlide = idx;
-              const url = location.pathname + location.search + SLIDE_HASHES[idx];
-              history.replaceState(null, '', url);
-            }
-          }
-        });
-      },
-      { root: pageEl, threshold: 0.5 }
-    );
-    slideEls.forEach((el) => slideObserver.observe(el));
-  }
+          });
+        },
+        { root: pageEl, threshold: 0.5 }
+      );
+      slideEls.forEach((el) => slideObserver.observe(el));
+    }
+  });
 
   // Typing/editing the hash on an already-open tab doesn't reload the page,
   // so the initial-load jump above never runs again — handle it live too.

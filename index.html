@@ -2,6 +2,26 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<script>
+  try {
+    if (localStorage.getItem('donado_theme') === 'dark') {
+      document.documentElement.classList.add('dark');
+    }
+  } catch (e) {}
+  // Avoid a flash of slide 1 before script.js can jump to #about: hide the
+  // page until the initial scroll position is set (see script.js init).
+  // Fallback timeout guards against script.js failing to load at all —
+  // otherwise the page would stay hidden forever. Placed as early as
+  // possible in <head> (before title/meta/favicons) so it runs before any
+  // of that markup could be used as a paint hint by the browser.
+  if (location.hash === '#about') {
+    document.documentElement.classList.add('jump-pending');
+    setTimeout(function () {
+      document.documentElement.classList.remove('jump-pending');
+    }, 2500);
+  }
+</script>
+<style>.jump-pending .page, .jump-pending .slide-dots, .jump-pending .nav { visibility: hidden; }</style>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Donado | Donations you can play</title>
 <meta name="description" content="Donations gamification. Donation alerts on your stream.">
@@ -56,16 +76,9 @@
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <link rel="manifest" href="/site.webmanifest">
 
-<script>
-  try {
-    if (localStorage.getItem('donado_theme') === 'dark') {
-      document.documentElement.classList.add('dark');
-    }
-  } catch (e) {}
-</script>
-
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Geologica:wght@500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap">
 <link href="https://fonts.googleapis.com/css2?family=Geologica:wght@500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/styles.css">
 
