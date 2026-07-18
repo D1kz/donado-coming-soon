@@ -70,9 +70,17 @@
   }
 
   // ---- state ----
-  let lang = 'ru', theme = null;
+  // Language is derived from the URL path (/, /ru/, /kz/), not stored
+  // preference — each path is its own crawlable page with its own OG tags,
+  // so the language must always match what's in the address bar.
+  function langFromPath() {
+    const p = location.pathname;
+    if (p === '/ru' || p.indexOf('/ru/') === 0) return 'ru';
+    if (p === '/kz' || p.indexOf('/kz/') === 0) return 'kz';
+    return 'en';
+  }
+  let lang = langFromPath(), theme = null;
   try {
-    lang = localStorage.getItem('donado_lang') || 'ru';
     theme = localStorage.getItem('donado_theme');
   } catch (e) {}
 
@@ -148,11 +156,13 @@
     applyTheme();
   }
 
+  const HTML_LANG = { en: 'en', ru: 'ru', kz: 'kk' };
+
   function renderLang() {
     const t = DICT[lang];
     langLabel.textContent = lang.toUpperCase();
     document.title = t.title;
-    document.documentElement.lang = lang;
+    document.documentElement.lang = HTML_LANG[lang];
 
     let cs = t.cs;
     if (state.narrow && t.csNarrow) cs = t.csNarrow;
@@ -177,13 +187,16 @@
     });
   }
 
+  const LANG_PATHS = { en: '/', ru: '/ru/', kz: '/kz/' };
+
   function setLang(l) {
-    lang = l;
-    try { localStorage.setItem('donado_lang', l); } catch (e) {}
-    state.langOpen = false;
-    langMenu.classList.add('is-hidden');
-    langBtn.setAttribute('aria-expanded', 'false');
-    renderLang();
+    if (l === lang) {
+      state.langOpen = false;
+      langMenu.classList.add('is-hidden');
+      langBtn.setAttribute('aria-expanded', 'false');
+      return;
+    }
+    location.href = LANG_PATHS[l];
   }
 
   langBtn.addEventListener('click', (e) => {
