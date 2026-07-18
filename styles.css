@@ -1,3 +1,37 @@
+/* Self-hosted (not Google Fonts' CDN) so every weight is one unicode-range-
+   free file: the CDN version splits cyrillic vs. cyrillic-ext into separate
+   woff2s, and Kazakh letters (ә/қ/ғ/ң) only exist in the cyrillic-ext file —
+   loading two files for one line of text caused visible baseline jitter
+   on Windows. */
+@font-face {
+  font-family: 'Geologica';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/Geologica-400.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Geologica';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('/fonts/Geologica-600.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Geologica';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('/fonts/Geologica-700.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Geologica';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url('/fonts/Geologica-800.woff2') format('woff2');
+}
+
 :root {
   --bg: #EEF3F4; --ink: #101718; --sub: #5D6A6C; --tag: #445052;
   --line: #DAE5E6; --card: #FFFFFF; --depth: #C3D2D3;
@@ -34,7 +68,7 @@ html, body {
 body {
   background: var(--bg);
   transition: background-color 0.25s;
-  font-family: 'Manrope', -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font-family: 'Geologica', -apple-system, 'Segoe UI', Roboto, sans-serif;
 }
 
 a { color: inherit; }
@@ -163,7 +197,7 @@ button {
   color: var(--ink);
   border-radius: 999px;
   padding: 8px 14px;
-  font-family: 'Manrope', -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font-family: 'Geologica', -apple-system, 'Segoe UI', Roboto, sans-serif;
   font-size: 12px;
   font-weight: 800;
   letter-spacing: 0.05em;
@@ -230,7 +264,7 @@ button {
   appearance: none;
   cursor: pointer;
   text-align: left;
-  font-family: 'Manrope', -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font-family: 'Geologica', -apple-system, 'Segoe UI', Roboto, sans-serif;
   font-size: 13.5px;
   font-weight: 700;
   background: transparent;
@@ -501,7 +535,7 @@ button {
 
 .about-body p {
   margin: 0;
-  font-family: 'Manrope', -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font-family: 'Geologica', -apple-system, 'Segoe UI', Roboto, sans-serif;
   font-size: clamp(14px, 2.1vw, 18px);
   line-height: 1.55;
   color: var(--tag);
@@ -550,7 +584,7 @@ button {
 
 .wl-title {
   flex: 1;
-  font-family: 'Manrope', -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font-family: 'Geologica', -apple-system, 'Segoe UI', Roboto, sans-serif;
   font-weight: 800;
   font-size: 14.5px;
   line-height: 1.25;
@@ -592,7 +626,7 @@ button {
   outline: none;
   border-radius: 999px;
   padding: 9px 14px;
-  font-family: 'Manrope', -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font-family: 'Geologica', -apple-system, 'Segoe UI', Roboto, sans-serif;
   font-size: 13.5px;
   font-weight: 600;
   transition: border-color 0.15s ease;
@@ -604,7 +638,7 @@ button {
 
 .wl-error {
   color: var(--error);
-  font-family: 'Manrope', -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font-family: 'Geologica', -apple-system, 'Segoe UI', Roboto, sans-serif;
   font-size: 12px;
   font-weight: 700;
   text-align: left;
@@ -649,7 +683,7 @@ button {
   display: flex;
   align-items: center;
   gap: 12px;
-  font-family: 'Manrope', -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font-family: 'Geologica', -apple-system, 'Segoe UI', Roboto, sans-serif;
   font-weight: 800;
   font-size: 14.5px;
   line-height: 1.3;

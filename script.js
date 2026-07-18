@@ -586,7 +586,7 @@
       const a = now - pp.born, al = Math.max(0, 1 - a / 1.9);
       ctx.globalAlpha = al;
       ctx.fillStyle = mix(baseC, gold, 1);
-      ctx.font = "700 12px 'Manrope', sans-serif";
+      ctx.font = "700 12px 'Geologica', sans-serif";
       ctx.fillText('+' + grp(pp.amount), lx - 14, ly - 14 - a * 30);
       ctx.globalAlpha = 1;
     });
