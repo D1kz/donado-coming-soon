@@ -4,6 +4,10 @@
   --accent: #12A2B8; --accent2: #E0A11C;
   --btnbg: #0A2E37; --btnfg: #F0FAFC; --btndepth: #061D24; --wordmark: #E0A11C;
   --btnshadow: rgba(9, 40, 33, 0.30); --btnshadow-strong: rgba(9, 40, 33, 0.42); --wm: #DCE4E5;
+  /* Error color for the waitlist form, tuned against --btnbg (its own
+     background), not the page background — the two diverge sharply
+     between themes (dark teal here vs. bright cyan in dark mode). */
+  --error: #FFB4B4; --error-border: #E85D5D;
 }
 
 html.dark {
@@ -12,6 +16,7 @@ html.dark {
   --accent: #2FC3E0; --accent2: #F7B23A;
   --btnbg: #2FC3E0; --btnfg: #062229; --btndepth: #1892AC; --wordmark: #F7B23A;
   --btnshadow: rgba(0, 0, 0, 0.50); --btnshadow-strong: rgba(47, 195, 224, 0.38); --wm: #182A2C;
+  --error: #7A1616; --error-border: #7A1616;
 }
 
 * { box-sizing: border-box; }
@@ -594,11 +599,11 @@ button {
 }
 
 .wl-input.is-invalid {
-  border-color: #E85D5D;
+  border-color: var(--error-border);
 }
 
 .wl-error {
-  color: #FFB4B4;
+  color: var(--error);
   font-family: 'Manrope', -apple-system, 'Segoe UI', Roboto, sans-serif;
   font-size: 12px;
   font-weight: 700;
