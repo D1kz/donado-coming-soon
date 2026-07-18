@@ -121,15 +121,29 @@ async function getAccessToken(env) {
   return tokenData.access_token;
 }
 
-async function writeToFirestore(env, accessToken, contact, lang) {
+const UTM_KEYS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content'];
+
+function sanitizeUtm(raw) {
+  const out = {};
+  if (!raw || typeof raw !== 'object') return out;
+  for (const key of UTM_KEYS) {
+    const v = raw[key];
+    if (typeof v === 'string' && v && v.length <= 200) out[key] = v;
+  }
+  return out;
+}
+
+async function writeToFirestore(env, accessToken, contact, lang, utm) {
   const url = `https://firestore.googleapis.com/v1/projects/${env.FIREBASE_PROJECT_ID}/databases/(default)/documents/waitlist`;
-  const body = {
-    fields: {
-      contact: { stringValue: contact },
-      lang: { stringValue: lang },
-      createdAt: { timestampValue: new Date().toISOString() }
-    }
+  const fields = {
+    contact: { stringValue: contact },
+    lang: { stringValue: lang },
+    createdAt: { timestampValue: new Date().toISOString() }
   };
+  for (const [key, value] of Object.entries(utm)) {
+    fields[key] = { stringValue: value };
+  }
+  const body = { fields };
   const res = await fetch(url, {
     method: 'POST',
     headers: {
@@ -174,7 +188,7 @@ export default {
       });
     }
 
-    const { contact, lang, turnstileToken } = payload || {};
+    const { contact, lang, turnstileToken, utm } = payload || {};
 
     if (!turnstileToken) {
       return new Response(JSON.stringify({ error: 'missing turnstile token' }), {
@@ -206,7 +220,7 @@ export default {
 
     try {
       const accessToken = await getAccessToken(env);
-      await writeToFirestore(env, accessToken, contact.trim(), lang);
+      await writeToFirestore(env, accessToken, contact.trim(), lang, sanitizeUtm(utm));
     } catch (e) {
       return new Response(JSON.stringify({ error: 'storage failure' }), {
         status: 502,

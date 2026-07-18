@@ -151,6 +151,29 @@
   const params = new URLSearchParams(location.search);
   if (params.get('tg')) tgLink.href = params.get('tg');
 
+  // Capture UTM params on landing so a signup made minutes later (after
+  // navigating between slides, toggling theme, etc.) still carries them —
+  // sessionStorage survives reloads within the tab but not new sessions.
+  const UTM_KEYS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content'];
+  function captureUtm() {
+    const fromUrl = {};
+    let hasAny = false;
+    UTM_KEYS.forEach((k) => {
+      const v = params.get(k);
+      if (v) { fromUrl[k] = v; hasAny = true; }
+    });
+    if (hasAny) {
+      try { sessionStorage.setItem('donado_utm', JSON.stringify(fromUrl)); } catch (e) {}
+      return fromUrl;
+    }
+    try {
+      const stored = sessionStorage.getItem('donado_utm');
+      if (stored) return JSON.parse(stored);
+    } catch (e) {}
+    return {};
+  }
+  const utm = captureUtm();
+
   function getTheme() {
     return theme || 'light';
   }
@@ -415,11 +438,11 @@
     fetch(WAITLIST_ENDPOINT, {
       method: 'POST',
       headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
-      body: JSON.stringify({ contact: contact, lang: lang, turnstileToken: token })
+      body: JSON.stringify({ contact: contact, lang: lang, turnstileToken: token, utm: utm })
     })
       .then((res) => {
         if (!res.ok) throw new Error('bad response');
-        if (window.umami) window.umami.track('waitlist-signup', { lang: lang });
+        if (window.umami) window.umami.track('waitlist-signup', Object.assign({ lang: lang }, utm));
         state.wlDone = true;
         wlDoneTextEl.textContent = DICT[lang].wlDone;
         updateWaitlistVisibility();
@@ -596,9 +619,10 @@
     requestAnimationFrame(tick);
   }
 
-  // ---- slide navigation (scroll-snap + dots) ----
+  // ---- slide navigation (scroll-snap + dots + #hash deep link) ----
   const slideEls = Array.from(document.querySelectorAll('.slide'));
   const dotEls = Array.from(slideDotsEl.children);
+  const SLIDE_HASHES = ['', '#about'];
 
   dotEls.forEach((dot, i) => {
     dot.addEventListener('click', () => {
@@ -607,6 +631,16 @@
     });
   });
 
+  // Jump to the deep-linked slide before the observer below gets a chance to
+  // record slide 0 as current and stamp the hash back to '' first.
+  const initialSlide = location.hash === '#about' && slideEls[1] ? 1 : 0;
+  if (initialSlide === 1) {
+    slideEls[1].scrollIntoView({ behavior: 'instant' });
+    dotEls.forEach((dot, i) => dot.classList.toggle('is-active', i === 1));
+  }
+
+  let slide2Tracked = false;
+  let lastKnownSlide = initialSlide;
   if ('IntersectionObserver' in window) {
     const slideObserver = new IntersectionObserver(
       (entries) => {
@@ -614,6 +648,17 @@
           if (entry.isIntersecting) {
             const idx = slideEls.indexOf(entry.target);
             dotEls.forEach((dot, i) => dot.classList.toggle('is-active', i === idx));
+            if (idx === 1 && !slide2Tracked) {
+              slide2Tracked = true;
+              if (window.umami) window.umami.track('slide2-view', Object.assign({ lang: lang }, utm));
+            }
+            // Reflect the current slide in the URL hash without adding
+            // history entries, so a link to #about can be shared/re-opened.
+            if (idx !== lastKnownSlide) {
+              lastKnownSlide = idx;
+              const url = location.pathname + location.search + SLIDE_HASHES[idx];
+              history.replaceState(null, '', url);
+            }
           }
         });
       },
@@ -621,6 +666,13 @@
     );
     slideEls.forEach((el) => slideObserver.observe(el));
   }
+
+  // Typing/editing the hash on an already-open tab doesn't reload the page,
+  // so the initial-load jump above never runs again — handle it live too.
+  window.addEventListener('hashchange', () => {
+    const idx = location.hash === '#about' ? 1 : 0;
+    if (slideEls[idx]) slideEls[idx].scrollIntoView({ behavior: 'smooth' });
+  });
 
   // ---- init ----
   applyTheme();
