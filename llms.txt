@@ -1,0 +1,18 @@
+# Donado
+
+> Donado turns donations into a game your viewers actually want to play. A donation platform for streamers and their audiences, launching soon.
+
+Donado is a coming-soon donation platform. Viewers press a button to donate, see the amount pop up with a small celebration animation, and watch a running total climb on a live chart. Built for streamers and their communities across Kazakhstan and the CIS.
+
+The site currently ships as a single static coming-soon page in three languages, with a waitlist signup for early access.
+
+## Pages
+
+- [English](https://donado.me/): default language, canonical page
+- [Русский](https://donado.me/ru/): Russian version
+- [Қазақша](https://donado.me/kz/): Kazakh version
+
+## Contact
+
+- Telegram: https://t.me/d0nad0
+- X (Twitter): https://x.com/d0nado
