@@ -11,7 +11,6 @@
       ],
       cs: ['скоро'],
       hint: 'жми',
-      title: 'Donado',
       wlTitle: 'Нравится? Узнай о запуске первым 🎉',
       wlPh: 'почта или @telegram',
       wlDone: 'Готово — напишем первыми 🎉',
@@ -29,7 +28,6 @@
       cs: ['жақында'],
       csNarrow: ['жа', 'қын', 'да'],
       hint: 'бас',
-      title: 'Donado',
       wlTitle: 'Ұнады ма? Іске қосылуды бірінші біл 🎉',
       wlPh: 'пошта немесе @telegram',
       wlDone: 'Дайын — бірінші боп жазамыз 🎉',
@@ -47,7 +45,6 @@
       cs: ['coming soon'],
       csNarrow: ['coming', 'soon'],
       hint: 'press it',
-      title: 'Donado',
       wlTitle: 'Like it? Be the first to know 🎉',
       wlPh: 'email or @telegram',
       wlDone: "Done — you'll hear it first 🎉",
@@ -161,7 +158,6 @@
   function renderLang() {
     const t = DICT[lang];
     langLabel.textContent = lang.toUpperCase();
-    document.title = t.title;
     document.documentElement.lang = HTML_LANG[lang];
 
     let cs = t.cs;
