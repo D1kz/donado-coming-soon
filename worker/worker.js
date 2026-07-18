@@ -28,6 +28,17 @@ function validateContact(raw) {
   return TG_RE.test(handle);
 }
 
+// Normalizes a validated contact into a stable, case-insensitive dedup key:
+// emails and Telegram handles are both case-insensitive, and the leading
+// '@' on a handle is just a formatting choice, not part of the identity.
+// Used as the Firestore document ID so a repeat signup overwrites the same
+// document instead of creating a duplicate lead.
+function contactKey(v) {
+  const trimmed = v.trim();
+  const handle = trimmed.startsWith('@') ? trimmed.slice(1) : trimmed;
+  return handle.toLowerCase();
+}
+
 function corsHeaders(origin, allowedOrigin) {
   const allow = origin === allowedOrigin ? origin : allowedOrigin;
   return {
@@ -133,19 +144,42 @@ function sanitizeUtm(raw) {
   return out;
 }
 
-async function writeToFirestore(env, accessToken, contact, lang, utm) {
-  const url = `https://firestore.googleapis.com/v1/projects/${env.FIREBASE_PROJECT_ID}/databases/(default)/documents/waitlist`;
+async function readSignupCount(env, accessToken, docId) {
+  const url = `https://firestore.googleapis.com/v1/projects/${env.FIREBASE_PROJECT_ID}/databases/(default)/documents/waitlist/${encodeURIComponent(docId)}`;
+  const res = await fetch(url, {
+    headers: { 'Authorization': `Bearer ${accessToken}` }
+  });
+  if (res.status === 404) return 0;
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`Firestore read failed: ${res.status} ${text}`);
+  }
+  const doc = await res.json();
+  const n = doc.fields && doc.fields.signupCount && doc.fields.signupCount.integerValue;
+  return n ? parseInt(n, 10) : 0;
+}
+
+async function writeToFirestore(env, accessToken, contact, lang, utm, docId) {
+  // PATCH to a specific document ID upserts: a repeat signup with the same
+  // normalized contact overwrites its own document instead of creating a
+  // duplicate lead. lastSeenAt tracks the most recent signup attempt;
+  // signupCount lets you tell repeats from first-timers server-side without
+  // exposing that distinction to the client (which always gets {ok: true}).
+  const priorCount = await readSignupCount(env, accessToken, docId);
+
+  const url = `https://firestore.googleapis.com/v1/projects/${env.FIREBASE_PROJECT_ID}/databases/(default)/documents/waitlist/${encodeURIComponent(docId)}`;
   const fields = {
     contact: { stringValue: contact },
     lang: { stringValue: lang },
-    createdAt: { timestampValue: new Date().toISOString() }
+    lastSeenAt: { timestampValue: new Date().toISOString() },
+    signupCount: { integerValue: String(priorCount + 1) }
   };
   for (const [key, value] of Object.entries(utm)) {
     fields[key] = { stringValue: value };
   }
   const body = { fields };
   const res = await fetch(url, {
-    method: 'POST',
+    method: 'PATCH',
     headers: {
       'Authorization': `Bearer ${accessToken}`,
       'Content-Type': 'application/json'
@@ -219,8 +253,9 @@ export default {
     }
 
     try {
+      const trimmedContact = contact.trim();
       const accessToken = await getAccessToken(env);
-      await writeToFirestore(env, accessToken, contact.trim(), lang, sanitizeUtm(utm));
+      await writeToFirestore(env, accessToken, trimmedContact, lang, sanitizeUtm(utm), contactKey(trimmedContact));
     } catch (e) {
       return new Response(JSON.stringify({ error: 'storage failure' }), {
         status: 502,
