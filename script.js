@@ -44,7 +44,7 @@
       ],
       cs: ['coming soon'],
       csNarrow: ['coming', 'soon'],
-      hint: 'press it',
+      hint: 'click',
       wlTitle: 'Like it? Be the first to know 🎉',
       wlPh: 'email or @telegram',
       wlDone: "Done — you'll hear it first 🎉",
