@@ -355,7 +355,6 @@ button {
 .counter-num {
   color: var(--ink);
   font-weight: 800;
-  font-family: 'Space Mono', monospace;
 }
 
 .press-wrap {
