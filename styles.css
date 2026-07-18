@@ -71,14 +71,31 @@ button {
 }
 
 .page {
-  min-height: 100vh;
-  min-height: 100dvh;
-  display: flex;
-  flex-direction: column;
+  height: 100vh;
+  height: 100dvh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scroll-snap-type: y mandatory;
   background: var(--bg);
   position: relative;
-  overflow: hidden;
   transition: background-color 0.25s;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.page::-webkit-scrollbar {
+  display: none;
+}
+
+.slide {
+  height: 100vh;
+  height: 100dvh;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
 }
 
 .chart-canvas {
@@ -91,13 +108,45 @@ button {
 
 /* Nav */
 .nav {
-  position: absolute;
+  position: fixed;
   top: 14px;
   right: 16px;
   display: flex;
   align-items: center;
   gap: 10px;
-  z-index: 6;
+  z-index: 10;
+}
+
+/* Slide dots */
+.slide-dots {
+  position: fixed;
+  left: clamp(14px, 3vw, 28px);
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.slide-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  background: var(--depth);
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.slide-dot:hover {
+  background: var(--accent2);
+}
+
+.slide-dot.is-active {
+  background: var(--accent2);
+  transform: scale(1.3);
 }
 
 .nav-btn {
@@ -123,7 +172,21 @@ button {
   background: var(--card);
 }
 
-.nav-btn--tg:hover {
+.nav-btn--tg,
+.nav-btn--x {
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  justify-content: center;
+}
+
+.nav-btn--tg .nav-btn-label,
+.nav-btn--x .nav-btn-label {
+  display: none;
+}
+
+.nav-btn--tg:hover,
+.nav-btn--x:hover {
   color: var(--accent2);
 }
 
@@ -379,6 +442,69 @@ button {
   color: var(--accent2);
   display: inline-block;
   animation: rotIn 0.5s cubic-bezier(0.2, 0.7, 0.3, 1) both;
+}
+
+/* About slide (slide 2) */
+.about-watermark {
+  position: absolute;
+  top: clamp(48px, 10vh, 110px);
+  left: 0;
+  right: 0;
+  z-index: 0;
+  pointer-events: none;
+  font-family: 'Geologica', sans-serif;
+  font-weight: 800;
+  letter-spacing: -0.045em;
+  line-height: 0.82;
+  text-align: center;
+  white-space: nowrap;
+  color: var(--wm);
+  font-size: min(clamp(50px, 11vw, 140px), 18vh);
+}
+
+.about-body {
+  position: relative;
+  z-index: 2;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  gap: clamp(18px, 3vh, 28px);
+  padding: clamp(90px, 18vh, 160px) clamp(24px, 8vw, 120px) clamp(24px, 6vh, 60px);
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.about-brand {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -0.22em;
+  z-index: 1;
+  pointer-events: none;
+  font-family: 'Geologica', sans-serif;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+  color: var(--accent2);
+  font-size: min(clamp(60px, 14vw, 170px), 20vh);
+}
+
+.about-body p {
+  margin: 0;
+  font-family: 'Manrope', sans-serif;
+  font-size: clamp(14px, 2.1vw, 18px);
+  line-height: 1.55;
+  color: var(--tag);
+}
+
+.about-body strong {
+  color: var(--accent2);
+  font-weight: 800;
 }
 
 /* Waitlist */

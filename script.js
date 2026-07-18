@@ -14,7 +14,10 @@
       wlTitle: 'Нравится? Узнай о запуске первым 🎉',
       wlPh: 'почта или @telegram',
       wlDone: 'Готово — напишем первыми 🎉',
-      counterLabel: 'собрано сейчас',
+      counterLabel: 'ты собрал на стриме:',
+      counterSuffix: 'донадов',
+      aboutP1: 'Поддержка от подписчиков станет ещё <strong>комфортнее</strong>, ведь теперь это часть игры. Каждый донат — это момент, который хочется повторить. Мы сделали <strong>донаты интереснее, удобнее и выгоднее</strong> для креатора и подписчиков. У каждого свой прогресс и свои достижения.',
+      aboutP2: '<strong>Донаты в одно касание</strong>, без сложных форм. Стример всегда знает, сколько и когда получит, а с бюрократией на счёт доходов мы поможем разобраться отдельно.',
       errEmail: 'Похоже на почту, но не хватает домена — проверьте адрес',
       errTg: 'Telegram-ник: 5–32 символа, начинается с буквы (латиница/цифры/подчёркивание)',
       errGeneric: 'Введите почту или Telegram-ник (@username)'
@@ -31,7 +34,10 @@
       wlTitle: 'Ұнады ма? Іске қосылуды бірінші біл 🎉',
       wlPh: 'пошта немесе @telegram',
       wlDone: 'Дайын — бірінші боп жазамыз 🎉',
-      counterLabel: 'қазір жиналды',
+      counterLabel: 'стримде жинағаның:',
+      counterSuffix: 'донадо',
+      aboutP1: 'Жазылушылардың қолдауы енді <strong>қолайлырақ</strong> болады — өйткені бұл ойынның бір бөлігі. Әр донат — қайталағың келетін сәт. Біз донатты креатор мен жазылушылар үшін <strong>қызықтырақ, ыңғайлырақ әрі тиімдірек</strong> еттік. Әркімнің өз прогресі, өз жетістіктері бар.',
+      aboutP2: '<strong>Бір түртумен донат</strong>, күрделі формаларсыз. Стример қашан, қанша алатынын әрдайым біледі, ал табысты рәсімдеу мәселесін шешуге біз бөлек көмектесеміз.',
       errEmail: 'Поштаға ұқсайды, бірақ домен жетіспейді — мекенжайды тексеріңіз',
       errTg: 'Telegram ник: 5–32 таңба, әріптен басталуы керек (латын әріптері/сандар/астын сызу)',
       errGeneric: 'Пошта немесе Telegram ник (@username) енгізіңіз'
@@ -48,7 +54,10 @@
       wlTitle: 'Like it? Be the first to know 🎉',
       wlPh: 'email or @telegram',
       wlDone: "Done — you'll hear it first 🎉",
-      counterLabel: 'raised so far',
+      counterLabel: "you've raised on stream:",
+      counterSuffix: 'donados',
+      aboutP1: "Support from your viewers gets even <strong>easier</strong>, because now it's part of the game. Every donation is a moment worth repeating. We made <strong>donations more fun, more convenient, and more rewarding</strong> for creators and viewers. Everyone has their own progress and achievements.",
+      aboutP2: "<strong>Donations in one tap</strong>, no complicated forms. The streamer always knows how much and when they'll get paid, and we'll help sort out the paperwork around income separately.",
       errEmail: "Looks like an email, but the domain's missing — check the address",
       errTg: 'Telegram handle: 5–32 characters, must start with a letter (letters/digits/underscore)',
       errGeneric: 'Enter an email or a Telegram handle (@username)'
@@ -115,6 +124,12 @@
   const csWatermark = $('csWatermark');
   const counterLabelEl = $('counterLabel');
   const counterNum = $('counterNum');
+  const counterSuffixEl = $('counterSuffix');
+  const aboutWatermark = $('aboutWatermark');
+  const aboutP1El = $('aboutP1');
+  const aboutP2El = $('aboutP2');
+  const pageEl = $('page');
+  const slideDotsEl = $('slideDots');
   const pressBtn = $('pressBtn');
   const particlesEl = $('particles');
   const pressAmt = $('pressAmt');
@@ -163,12 +178,17 @@
     let cs = t.cs;
     if (state.narrow && t.csNarrow) cs = t.csNarrow;
     csWatermark.innerHTML = cs.map(l => '<div>' + l + '</div>').join('');
+    aboutWatermark.innerHTML = cs.map(l => '<div>' + l + '</div>').join('');
 
     counterLabelEl.textContent = t.counterLabel;
+    counterSuffixEl.textContent = t.counterSuffix;
     hintText.textContent = t.hint;
     const pair = t.tagPairs[state.rotI % t.tagPairs.length];
     tagBaseEl.textContent = pair.base;
     tagRotEl.textContent = pair.rot;
+
+    aboutP1El.innerHTML = t.aboutP1;
+    aboutP2El.innerHTML = t.aboutP2;
 
     wlTitleEl.textContent = t.wlTitle;
     wlInput.placeholder = t.wlPh;
@@ -574,6 +594,32 @@
     last = realNow;
     counterNum.textContent = grp(chart.total);
     requestAnimationFrame(tick);
+  }
+
+  // ---- slide navigation (scroll-snap + dots) ----
+  const slideEls = Array.from(document.querySelectorAll('.slide'));
+  const dotEls = Array.from(slideDotsEl.children);
+
+  dotEls.forEach((dot, i) => {
+    dot.addEventListener('click', () => {
+      const target = slideEls[i];
+      if (target) target.scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+
+  if ('IntersectionObserver' in window) {
+    const slideObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const idx = slideEls.indexOf(entry.target);
+            dotEls.forEach((dot, i) => dot.classList.toggle('is-active', i === idx));
+          }
+        });
+      },
+      { root: pageEl, threshold: 0.5 }
+    );
+    slideEls.forEach((el) => slideObserver.observe(el));
   }
 
   // ---- init ----

@@ -85,85 +85,107 @@
 </head>
 <body>
 
-<div class="page">
-  <canvas id="chart" class="chart-canvas"></canvas>
+<div class="nav" data-screen-label="Nav">
+  <a id="tgLink" href="https://t.me/d0nad0" target="_blank" rel="noopener" aria-label="Telegram" class="nav-btn nav-btn--tg" data-umami-event="telegram-link-click">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M21.5 4.3 L2.8 11.5 c-0.9 0.35 -0.9 1.6 0.05 1.9 L7.6 14.9 L9.4 20.4 c0.25 0.75 1.2 0.9 1.7 0.3 L13.6 17.6 L18.3 21.1 c0.6 0.45 1.5 0.1 1.65 -0.65 L23 5.6 c0.2 -0.95 -0.7 -1.7 -1.5 -1.3 Z M9.5 14.2 L18 8.4 L11.2 15.1 L10.9 18.4 Z" fill="currentColor"></path></svg>
+    <span class="nav-btn-label">Telegram</span>
+  </a>
 
-  <div class="nav" data-screen-label="Nav">
-    <a id="tgLink" href="https://t.me/d0nad0" target="_blank" rel="noopener" class="nav-btn nav-btn--tg" data-umami-event="telegram-link-click">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M21.5 4.3 L2.8 11.5 c-0.9 0.35 -0.9 1.6 0.05 1.9 L7.6 14.9 L9.4 20.4 c0.25 0.75 1.2 0.9 1.7 0.3 L13.6 17.6 L18.3 21.1 c0.6 0.45 1.5 0.1 1.65 -0.65 L23 5.6 c0.2 -0.95 -0.7 -1.7 -1.5 -1.3 Z M9.5 14.2 L18 8.4 L11.2 15.1 L10.9 18.4 Z" fill="currentColor"></path></svg>
-      Telegram
-    </a>
+  <a id="xLink" href="https://x.com/d0nado" target="_blank" rel="noopener" aria-label="X" class="nav-btn nav-btn--x" data-umami-event="x-link-click">
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M18.3 2.4h3.3l-7.3 8.3 8.5 11.2h-6.6l-5.2-6.8-5.9 6.8H1.7l7.8-8.9L1.4 2.4h6.8l4.7 6.2Zm-1.2 17.6h1.8L7 4.3H5.1Z" fill="currentColor"></path></svg>
+    <span class="nav-btn-label">X</span>
+  </a>
 
-    <div class="lang-wrap">
-      <button id="langBtn" class="nav-btn" aria-haspopup="true" aria-expanded="false">
-        <span id="langLabel">RU</span>
-        <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1 L5 5 L9 1" stroke="var(--sub)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></svg>
-      </button>
-      <div id="langMenu" class="lang-menu is-hidden">
-        <button class="lang-opt" data-lang="ru">Русский</button>
-        <button class="lang-opt" data-lang="kz">Қазақша</button>
-        <button class="lang-opt" data-lang="en">English</button>
-      </div>
-    </div>
-
-    <button id="themeBtn" class="theme-btn" aria-label="theme">
-      <svg id="iconMoon" class="theme-icon" width="16" height="16" viewBox="0 0 20 20"><circle cx="10" cy="10" r="7" fill="var(--ink)"></circle><circle cx="13.5" cy="7" r="6" fill="var(--card)"></circle></svg>
-      <svg id="iconSun" class="theme-icon is-hidden" width="17" height="17" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="4" fill="var(--ink)"></circle><path d="M10 1.5v2.5 M10 16v2.5 M1.5 10h2.5 M16 10h2.5 M4 4l1.8 1.8 M14.2 14.2l1.8 1.8 M16 4l-1.8 1.8 M5.8 14.2l-1.8 1.8" stroke="var(--ink)" stroke-width="1.7" stroke-linecap="round"></path></svg>
+  <div class="lang-wrap">
+    <button id="langBtn" class="nav-btn" aria-haspopup="true" aria-expanded="false">
+      <span id="langLabel">RU</span>
+      <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1 L5 5 L9 1" stroke="var(--sub)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></svg>
     </button>
+    <div id="langMenu" class="lang-menu is-hidden">
+      <button class="lang-opt" data-lang="ru">Русский</button>
+      <button class="lang-opt" data-lang="kz">Қазақша</button>
+      <button class="lang-opt" data-lang="en">English</button>
+    </div>
   </div>
 
-  <div class="hero" data-screen-label="Hero">
-    <div id="csWatermark" class="cs-watermark"></div>
+  <button id="themeBtn" class="theme-btn" aria-label="theme">
+    <svg id="iconMoon" class="theme-icon" width="16" height="16" viewBox="0 0 20 20"><circle cx="10" cy="10" r="7" fill="var(--ink)"></circle><circle cx="13.5" cy="7" r="6" fill="var(--card)"></circle></svg>
+    <svg id="iconSun" class="theme-icon is-hidden" width="17" height="17" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="4" fill="var(--ink)"></circle><path d="M10 1.5v2.5 M10 16v2.5 M1.5 10h2.5 M16 10h2.5 M4 4l1.8 1.8 M14.2 14.2l1.8 1.8 M16 4l-1.8 1.8 M5.8 14.2l-1.8 1.8" stroke="var(--ink)" stroke-width="1.7" stroke-linecap="round"></path></svg>
+  </button>
+</div>
 
-    <div class="counter-pill">
-      <span id="counterLabel"></span>
-      <span id="counterNum" class="counter-num"></span>
-    </div>
+<div class="slide-dots" id="slideDots">
+  <button class="slide-dot is-active" data-slide="0" aria-label="Slide 1"></button>
+  <button class="slide-dot" data-slide="1" aria-label="Slide 2"></button>
+</div>
 
-    <div class="press-wrap">
-      <button id="pressBtn" class="press-btn">donado</button>
-      <div id="particles" class="particles"></div>
-      <div id="pressAmt" class="press-amt is-hidden"></div>
-      <div id="pressHint" class="press-hint">
-        <svg width="32" height="18" viewBox="0 0 30 18" fill="none"><path d="M2 9 L26 9 M20 3 L26 9 L20 15" stroke="var(--accent2)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
-        <span id="hintText"></span>
+<div class="page" id="page">
+  <section class="slide" id="slide0" data-screen-label="Slide 1">
+    <canvas id="chart" class="chart-canvas"></canvas>
+
+    <div class="hero" data-screen-label="Hero">
+      <div id="csWatermark" class="cs-watermark"></div>
+
+      <div class="counter-pill">
+        <span id="counterLabel"></span>
+        <span id="counterNum" class="counter-num"></span>
+        <span id="counterSuffix"></span>
       </div>
-    </div>
-  </div>
 
-  <div class="tagline-area" data-screen-label="Tagline">
-    <div id="waitlist" class="waitlist is-hidden">
-      <div id="wlActive" class="wl-active">
-        <div class="wl-row">
-          <div id="wlTitle" class="wl-title"></div>
-          <button id="wlClose" class="wl-close" aria-label="close">×</button>
+      <div class="press-wrap">
+        <button id="pressBtn" class="press-btn">donado</button>
+        <div id="particles" class="particles"></div>
+        <div id="pressAmt" class="press-amt is-hidden"></div>
+        <div id="pressHint" class="press-hint">
+          <svg width="32" height="18" viewBox="0 0 30 18" fill="none"><path d="M2 9 L26 9 M20 3 L26 9 L20 15" stroke="var(--accent2)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+          <span id="hintText"></span>
         </div>
-        <div class="wl-form">
-          <input id="wlInput" class="wl-input" type="text" autocomplete="off" inputmode="email">
-          <button id="wlSubmit" class="wl-submit" aria-label="submit">→</button>
-        </div>
-        <div
-          id="turnstileWidget"
-          class="cf-turnstile"
-          data-sitekey="0x4AAAAAAD33hhv20LICa3tj"
-          data-size="invisible"
-          data-callback="onTurnstileSuccess"
-          data-error-callback="onTurnstileError"
-        ></div>
-        <div id="wlError" class="wl-error is-hidden"></div>
-      </div>
-      <div id="wlDone" class="wl-done is-hidden">
-        <span class="wl-done-check">✓</span>
-        <span id="wlDoneText" class="wl-done-text"></span>
-        <button id="wlDoneClose" class="wl-done-close" aria-label="close">×</button>
       </div>
     </div>
 
-    <h1 class="tagline">
-      <span id="tagBase"></span><br>
-      <span id="tagRot" class="tag-rot"></span>
-    </h1>
-  </div>
+    <div class="tagline-area" data-screen-label="Tagline">
+      <div id="waitlist" class="waitlist is-hidden">
+        <div id="wlActive" class="wl-active">
+          <div class="wl-row">
+            <div id="wlTitle" class="wl-title"></div>
+            <button id="wlClose" class="wl-close" aria-label="close">×</button>
+          </div>
+          <div class="wl-form">
+            <input id="wlInput" class="wl-input" type="text" autocomplete="off" inputmode="email">
+            <button id="wlSubmit" class="wl-submit" aria-label="submit">→</button>
+          </div>
+          <div
+            id="turnstileWidget"
+            class="cf-turnstile"
+            data-sitekey="0x4AAAAAAD33hhv20LICa3tj"
+            data-size="invisible"
+            data-callback="onTurnstileSuccess"
+            data-error-callback="onTurnstileError"
+          ></div>
+          <div id="wlError" class="wl-error is-hidden"></div>
+        </div>
+        <div id="wlDone" class="wl-done is-hidden">
+          <span class="wl-done-check">✓</span>
+          <span id="wlDoneText" class="wl-done-text"></span>
+          <button id="wlDoneClose" class="wl-done-close" aria-label="close">×</button>
+        </div>
+      </div>
+
+      <h1 class="tagline">
+        <span id="tagBase"></span><br>
+        <span id="tagRot" class="tag-rot"></span>
+      </h1>
+    </div>
+  </section>
+
+  <section class="slide" id="slide1" data-screen-label="Slide 2">
+    <div id="aboutWatermark" class="about-watermark"></div>
+    <div class="about-body">
+      <p id="aboutP1"></p>
+      <p id="aboutP2"></p>
+    </div>
+    <div class="about-brand">donado</div>
+  </section>
 </div>
 
 <script src="/script.js"></script>
